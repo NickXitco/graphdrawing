@@ -4,10 +4,10 @@ const width = window.innerWidth;
 const height = window.innerHeight;
 const numVertices = 100;
 const tol = 0;
-let step = 0.003;
+let step = 0.010;
 
-const C = 3;
-const K = 10;
+const C = 2;
+const K = 7.5;
 
 
 class Vertex {
@@ -16,8 +16,8 @@ class Vertex {
     }
 
     randPosition() {
-        this.x = (Math.random() * (width - 300)) + 150;
-        this.y = (Math.random() * (height - 300)) + 150;
+        this.x = (Math.random() * (width / 4)) + width / 2.75;
+        this.y = (Math.random() * (height / 4)) + height / 2.75;
     }
 
     addNeighbor(v) {
@@ -85,7 +85,7 @@ function setup() {
 function draw() {
     background(250);
 
-
+    let energy = 0;
     for (const v of vertices) {
         if (step <= 0) break;
         let f = {
@@ -108,11 +108,15 @@ function draw() {
 
         v.x += step * f.x;
         v.y += step * f.y;
+        energy += (Math.sqrt(f.x**2 + f.y**2));
         stroke(255 - Math.min(5 * (Math.sqrt(f.x**2 + f.y**2)), 255));
         circle(v.x, v.y, 5);
         stroke(0);
     }
-    step -= 0.0000001;
+    step = (energy > 51200) ? 512 / energy : 0.01;
+    step = (energy < 400) ? step - 0.001 : step;
+    textSize(16);
+    text(Math.floor(energy), 40, 50);
 
 
     for (const v of vertices) {
