@@ -80,6 +80,16 @@ function setup() {
 
     strokeWeight(1);
     smooth();
+	
+	button = createButton('Reset');
+    button.position(40, 60);
+    button.mousePressed(reset);
+}
+
+function reset() {
+	vertices = [];
+	edges = [];
+	setup();
 }
 
 function draw() {
