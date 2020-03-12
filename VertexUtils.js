@@ -1,16 +1,18 @@
 class VertexUtils {
-    static updateExtremes(v, extremes) {
-        if (v.x < extremes.east.x) {
-            extremes.east = v;
-        }
-        if (v.x > extremes.west.x) {
-            extremes.west = v;
-        }
-        if (v.y > extremes.south.y) {
-            extremes.south = v;
-        }
-        if (v.y < extremes.north.y) {
-            extremes.north = v;
+    static updateExtrema(vertices, extremes) {
+        for (const v of vertices) {
+            if (v.x < extremes.east.x) {
+                extremes.east = v;
+            }
+            if (v.x > extremes.west.x) {
+                extremes.west = v;
+            }
+            if (v.y > extremes.south.y) {
+                extremes.south = v;
+            }
+            if (v.y < extremes.north.y) {
+                extremes.north = v;
+            }
         }
     }
 
@@ -37,22 +39,7 @@ class VertexUtils {
 
         g.xSorted = this.sortVerticesX(g.vertices);
         g.ySorted = this.sortVerticesY(g.vertices);
-        console.log(g.xSorted);
-        console.log(g.ySorted);
         g.extremes = this.getExtremes(g.xSorted, g.ySorted);
-        console.log(g.extremes);
-
-        background(250);
-
-        this.drawBoundingSquare(g.extremes);
-
-        for (const v of g.vertices) {
-            v.draw(g.extremes);
-        }
-
-        for (const e of g.edges) {
-            line(e.u.x, e.u.y, e.v.x, e.v.y);
-        }
     }
 
     static drawBoundingSquare(extremes) {
@@ -88,5 +75,42 @@ class VertexUtils {
     static getExtremes(xSorted, ySorted) {
         return {south: ySorted[ySorted.length - 1], north: ySorted[0], east: xSorted[0], west: xSorted[xSorted.length - 1]};
     }
+
+    static getEnergy(vertices) {
+        let energy = 0;
+        for (const v of vertices) {
+            energy += (Math.sqrt(v.f.x**2 + v.f.y**2));
+        }
+        return energy;
+    }
+
+    static updateForces(vertices, stepSize, C, K) {
+        for (const v of vertices) {
+            if (stepSize <= 0) break;
+            let f = {x: 0, y: 0};
+
+            for (const u of v.neighbors) {
+                const fa = Vertex.attractiveForce(u, v, K);
+                f.x += fa.x;
+                f.y += fa.y;
+            }
+
+            for (const j of vertices) {
+                if (j === v) continue;
+                const fr = Vertex.repulsiveForce(j, v, C, K);
+                f.x += fr.x;
+                f.y += fr.y;
+            }
+            v.f = f;
+        }
+    }
+
+    static applyForces(vertices, stepSize) {
+        for (const v of vertices) {
+            v.applyForce(stepSize);
+        }
+    }
 }
+
+
 

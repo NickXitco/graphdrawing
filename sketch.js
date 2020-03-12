@@ -3,7 +3,7 @@ const globals = {
     edges: [],
     width: window.innerWidth,
     height: window.innerHeight,
-    numVertices: 200,
+    numVertices: 400,
     theta: 1.0,
     stepSize: 0.010,
     C: 2,
@@ -20,9 +20,6 @@ let step;
 let stepButton;
 
 function setup() {
-    VertexUtils.placeVertices(globals);
-    QuadTree.createQuadTree(globals);
-
     createCanvas(globals.width, globals.height);
     stroke(0);
 
@@ -40,6 +37,8 @@ function setup() {
     stepButton = createButton('Step');
     stepButton.position(40, 120);
     stepButton.mousePressed(() => {if(paused) {paused = false; step = true;}});
+
+    VertexUtils.placeVertices(globals);
 }
 
 function pause() {
@@ -54,44 +53,7 @@ function reset() {
 }
 
 function draw() {
-    if (paused) return;
-
     background(250);
-
-    VertexUtils.drawBoundingSquare(globals.extremes);
-
-    let energy = 0;
-    for (const v of globals.vertices) {
-        if (globals.stepSize <= 0) break;
-        let f = {x: 0, y: 0};
-
-        for (const u of v.neighbors) {
-            const fa = Vertex.attractiveForce(u, v, globals.K);
-            f.x += fa.x;
-            f.y += fa.y;
-        }
-
-        for (const j of globals.vertices) {
-            if (j === v) continue;
-            const fr = Vertex.repulsiveForce(j, v, globals.C, globals.K);
-            f.x += fr.x;
-            f.y += fr.y;
-        }
-
-        v.x += globals.stepSize * f.x;
-        v.y += globals.stepSize * f.y;
-        energy += (Math.sqrt(f.x**2 + f.y**2));
-        v.f = f;
-    }
-    globals.stepSize = (energy > 51200) ? 512 / energy : 0.01;
-    globals.stepSize = (energy < 400) ? globals.stepSize - 0.001 : globals.stepSize;
-    textSize(16);
-    fill(0);
-    text(Math.floor(energy), 40, 50);
-
-    for (const v of globals.vertices) {
-        VertexUtils.updateExtremes(v, globals.extremes);
-    }
 
     for (const v of globals.vertices) {
         v.draw(globals.extremes);
@@ -101,9 +63,33 @@ function draw() {
         line(e.u.x, e.u.y, e.v.x, e.v.y);
     }
 
+    VertexUtils.drawBoundingSquare(globals.extremes);
+
+    QuadTree.createQuadTree(globals);
+
+    VertexUtils.updateForces(globals.vertices, globals.stepSize, globals.C, globals.K);
+
+    const energy = VertexUtils.getEnergy(globals.vertices);
+    printEnergy(energy);
+    globals.stepSize = getStepSize(energy);
+
+    if (paused) return;
+
+    VertexUtils.applyForces(globals.vertices, globals.stepSize);
+    VertexUtils.updateExtrema(globals.vertices, globals.extremes);
+
     if (step) {
         step = false;
         paused = true;
     }
 }
 
+function printEnergy(energy) {
+    textSize(16);
+    fill(0);
+    text(Math.floor(energy), 40, 50);
+}
+
+function getStepSize(energy) {
+    return Math.max(Math.min(512 / energy, Math.min(2 ** -16 * energy, 0.01)), 0);
+}

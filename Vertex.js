@@ -6,6 +6,7 @@ class Vertex {
 
     constructor() {
         this.neighbors = [];
+        this.f = {x: 0, y:0};
     }
 
     randPosition(width, height) {
@@ -44,13 +45,15 @@ class Vertex {
         };
     }
 
+    applyForce(stepSize) {
+        this.x += stepSize * this.f.x;
+        this.y += stepSize * this.f.y;
+    }
+
+
     draw(extremes) {
         const v = this;
-        if (v.f !== undefined) {
-            stroke(255 - Math.min(5 * (Math.sqrt(v.f.x ** 2 + v.f.y ** 2)), 255));
-        } else {
-            stroke(0, 255);
-        }
+        stroke(255 - Math.min(5 * (Math.sqrt(v.f.x ** 2 + v.f.y ** 2)), 255));
 
         if (Object.values(extremes).includes(v)) {
             fill('aqua');
