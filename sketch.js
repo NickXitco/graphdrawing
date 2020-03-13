@@ -19,6 +19,8 @@ let pauseButton;
 let step;
 let stepButton;
 
+let scaleSlider;
+
 function setup() {
     createCanvas(globals.width, globals.height);
     stroke(0);
@@ -38,6 +40,10 @@ function setup() {
     stepButton.position(40, 120);
     stepButton.mousePressed(() => {if(paused) {paused = false; step = true;}});
 
+    scaleSlider = createSlider(0, 5, 1, 0);
+    scaleSlider.position(40, 150);
+    scaleSlider.style('width', '80px');
+
     VertexUtils.placeVertices(globals);
 }
 
@@ -55,6 +61,7 @@ function reset() {
 function draw() {
     background(250);
 
+    scale(scaleSlider.value());
     for (const v of globals.vertices) {
         v.draw(globals.extremes);
     }
@@ -69,6 +76,7 @@ function draw() {
 
     VertexUtils.updateForces(globals.vertices, globals.stepSize, globals.C, globals.K);
 
+    scale(1);
     const energy = VertexUtils.getEnergy(globals.vertices);
     printEnergy(energy);
     globals.stepSize = getStepSize(energy);
