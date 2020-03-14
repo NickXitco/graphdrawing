@@ -42,24 +42,6 @@ class VertexUtils {
         g.extremes = this.getExtremes(g.xSorted, g.ySorted);
     }
 
-    static drawBoundingSquare(extremes) {
-        let upperLeft = {x: 0, y: 0};
-        let diameter;
-        const naturalHeight = extremes.south.y - extremes.north.y;
-        const naturalWidth = extremes.west.x - extremes.east.x;
-        if (naturalHeight > naturalWidth) {
-            upperLeft.y = extremes.north.y - 5;
-            upperLeft.x = extremes.east.x - ((naturalHeight - naturalWidth) / 2) - 5;
-            diameter = naturalHeight + 10;
-        } else {
-            upperLeft.x = extremes.east.x - 5;
-            upperLeft.y = extremes.north.y - ((naturalWidth - naturalHeight) / 2) - 5;
-            diameter = naturalWidth + 10;
-        }
-        fill(0, 0);
-        rect(upperLeft.x, upperLeft.y, diameter, diameter);
-    }
-
     static sortVerticesX(vertices) {
         let newV = [...vertices];
         newV.sort((a, b) => a.x - b.x);
