@@ -66,7 +66,7 @@ class VertexUtils {
         return energy;
     }
 
-    static updateForces(vertices, stepSize, C, K) {
+    static updateForces(vertices, stepSize, C, K, theta) {
         for (const v of vertices) {
             if (stepSize <= 0) break;
             let f = {x: 0, y: 0};
@@ -79,7 +79,7 @@ class VertexUtils {
 
             for (const j of vertices) {
                 if (j === v) continue;
-                const fr = Vertex.repulsiveForce(j, v, C, K);
+                const fr = Vertex.repulsiveForce(j, v, C, K, theta);
                 f.x += fr.x;
                 f.y += fr.y;
             }

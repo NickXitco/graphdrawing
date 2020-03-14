@@ -36,7 +36,7 @@ class Vertex {
         };
     }
 
-    static repulsiveForce(u, v, C, K) {
+    static repulsiveForce(u, v, C, K, theta) {
         let f = C * K * K / Vertex.distance(u, v);
 
         return {
@@ -51,15 +51,11 @@ class Vertex {
     }
 
 
-    draw(extremes) {
+    draw() {
         const v = this;
         stroke(255 - Math.min(5 * (Math.sqrt(v.f.x ** 2 + v.f.y ** 2)), 255));
 
-        if (Object.values(extremes).includes(v)) {
-            fill('aqua');
-        } else {
-            fill(0, 0);
-        }
+        fill(0, 0);
         circle(v.x, v.y, 5);
         stroke(0);
     }

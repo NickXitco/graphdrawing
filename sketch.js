@@ -78,11 +78,11 @@ function draw() {
         line(e.u.x, e.u.y, e.v.x, e.v.y);
     }
 
-    //QuadTree.createQuadTree(globals);
+    QuadTree.createQuadTree(globals);
 
     pop();
 
-    VertexUtils.updateForces(globals.vertices, globals.stepSize, globals.C, globals.K);
+    VertexUtils.updateForces(globals.vertices, globals.stepSize, globals.C, globals.K, globals.theta);
 
     const energy = VertexUtils.getEnergy(globals.vertices);
     printEnergy(energy);
