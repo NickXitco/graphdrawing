@@ -77,12 +77,9 @@ class VertexUtils {
                 f.y += fa.y;
             }
 
-            for (const j of vertices) {
-                if (j === v) continue;
-                const fr = Vertex.repulsiveForce(j, v, C, K, theta);
-                f.x += fr.x;
-                f.y += fr.y;
-            }
+            const fr = Vertex.repulsiveForce(v, C, K, theta);
+            f.x += fr.x;
+            f.y += fr.y;
             v.f = f;
         }
     }

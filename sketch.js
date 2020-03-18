@@ -3,7 +3,7 @@ const globals = {
     edges: [],
     width: window.innerWidth,
     height: window.innerHeight,
-    numVertices: 100,
+    numVertices: 30,
     theta: 1.0,
     stepSize: 0.010,
     C: 2,

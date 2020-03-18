@@ -150,7 +150,32 @@ class QuadTree {
         }
 
         root.getCenterOfMass();
+    }
 
+    getSupernodes(v, theta, supernodes) {
+
+        if (this.leaf && this.point === null) {return;}
+        if (this.point === v) {return;}
+        if (this.leaf && this.point !== null) {supernodes.push(this); return;}
+
+        const diameter = this.boundingBox.west - this.boundingBox.east;
+        const distance = Math.sqrt((v.x - this.centerOfMass.x) ** 2 + (v.y - this.centerOfMass.y) ** 2);
+
+        if (diameter / distance <= theta) {
+            supernodes.push(this);
+            return;
+        }
+
+        this.subtrees.ne.getSupernodes(v, theta, supernodes);
+        this.subtrees.nw.getSupernodes(v, theta, supernodes);
+        this.subtrees.se.getSupernodes(v, theta, supernodes);
+        this.subtrees.sw.getSupernodes(v, theta, supernodes);
+    }
+
+    static getSupernodes(v, theta) {
+        let supernodes = [];
+        root.getSupernodes(v, theta, supernodes);
+        return supernodes;
     }
 
 }

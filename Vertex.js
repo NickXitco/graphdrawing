@@ -36,12 +36,20 @@ class Vertex {
         };
     }
 
-    static repulsiveForce(u, v, C, K, theta) {
-        let f = C * K * K / Vertex.distance(u, v);
+    static repulsiveForce(v, C, K, theta) {
+        let fx = 0;
+        let fy = 0;
+        for (const supernode of QuadTree.getSupernodes(v, theta)) {
+            const s = supernode.centerOfMass;
+            const u = {x: s.x, y: s.y};
+            const f = C * K * K  * s.s / Vertex.distance(u, v);
+            fx += Math.cos(Vertex.angle(u, v)) * f;
+            fy += Math.sin(Vertex.angle(u, v)) * f;
+        }
 
         return {
-            x: Math.cos(Vertex.angle(u, v)) * f,
-            y: Math.sin(Vertex.angle(u, v)) * f
+            x: fx,
+            y: fy
         };
     }
 
