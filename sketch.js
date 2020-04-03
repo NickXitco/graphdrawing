@@ -3,7 +3,7 @@ const globals = {
     edges: [],
     width: window.innerWidth,
     height: window.innerHeight,
-    numVertices: 30,
+    numVertices: 3000,
     theta: 1.0,
     stepSize: 0.010,
     C: 2,
@@ -27,6 +27,9 @@ let mOrigin = {x: 0, y: 0};
 let mDown = {x: 0, y: 0};
 let mCurrent = {x: 0, y: 0};
 
+let showLinesCheckbox;
+let showVerticesCheckbox;
+
 function setup() {
     createCanvas(globals.width, globals.height);
     stroke(0);
@@ -45,6 +48,11 @@ function setup() {
     stepButton = createButton('Step');
     stepButton.position(40, 120);
     stepButton.mousePressed(() => {if(paused) {paused = false; step = true;}});
+
+    showLinesCheckbox = createCheckbox(' Show Lines', true);
+    showLinesCheckbox.position(40, 150);
+    showVerticesCheckbox = createCheckbox(' Show Vertices', true);
+    showVerticesCheckbox.position(40, 180);
 
     VertexUtils.placeVertices(globals);
 }
@@ -70,12 +78,16 @@ function draw() {
     scale(scaleVal);
     translate(offsetX, offsetY);
 
-    for (const v of globals.vertices) {
-        v.draw(globals.extremes);
+    if (showVerticesCheckbox.checked()) {
+        for (const v of globals.vertices) {
+            v.draw(globals.extremes);
+        }
     }
 
-    for (const e of globals.edges) {
-        line(e.u.x, e.u.y, e.v.x, e.v.y);
+    if (showLinesCheckbox.checked()) {
+        for (const e of globals.edges) {
+            line(e.u.x, e.u.y, e.v.x, e.v.y);
+        }
     }
 
     QuadTree.createQuadTree(globals);

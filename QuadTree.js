@@ -60,13 +60,13 @@ class QuadTree {
             this.centerOfMass.x = (ne.x * ne.s + nw.x * nw.s + se.x * se.s + sw.x * sw.s) / this.centerOfMass.s;
             this.centerOfMass.y = (ne.y * ne.s + nw.y * nw.s + se.y * se.s + sw.y * sw.s) / this.centerOfMass.s;
 
-            if (ne.s > 0) line(this.centerOfMass.x, this.centerOfMass.y, ne.x, ne.y);
-            if (nw.s > 0) line(this.centerOfMass.x, this.centerOfMass.y, nw.x, nw.y);
-            if (se.s > 0) line(this.centerOfMass.x, this.centerOfMass.y, se.x, se.y);
-            if (sw.s > 0) line(this.centerOfMass.x, this.centerOfMass.y, sw.x, sw.y);
+            //if (ne.s > 0) line(this.centerOfMass.x, this.centerOfMass.y, ne.x, ne.y);
+            //if (nw.s > 0) line(this.centerOfMass.x, this.centerOfMass.y, nw.x, nw.y);
+            //if (se.s > 0) line(this.centerOfMass.x, this.centerOfMass.y, se.x, se.y);
+            //if (sw.s > 0) line(this.centerOfMass.x, this.centerOfMass.y, sw.x, sw.y);
         }
 
-
+        /*
         fill(255, 0, 0, 50);
         stroke(255, 0, 0, 75);
         circle(this.centerOfMass.x, this.centerOfMass.y, 1.5 * this.centerOfMass.s);
@@ -74,6 +74,7 @@ class QuadTree {
         textSize(0.3 * this.centerOfMass.s);
         textAlign(CENTER, CENTER);
         text(this.centerOfMass.s, this.centerOfMass.x, this.centerOfMass.y);
+         */
 
         return this.centerOfMass;
     }
@@ -123,10 +124,10 @@ class QuadTree {
          se.boundingBox = {north: yCenter, east: xEast, south: ySouth, west: xCenter};
          sw.boundingBox = {north: yCenter, east: xCenter, south: ySouth, west: xWest};
 
-         ne.drawBoundingBox();
-         nw.drawBoundingBox();
-         se.drawBoundingBox();
-         sw.drawBoundingBox();
+         //ne.drawBoundingBox();
+         //nw.drawBoundingBox();
+         //se.drawBoundingBox();
+         //sw.drawBoundingBox();
 
          this.subtrees.ne = ne;
          this.subtrees.nw = nw;
